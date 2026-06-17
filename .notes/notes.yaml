@@ -1,0 +1,79 @@
+apiVersion: argoproj.io/v1alpha1
+# Specifies which Kubernetes API ArgoCD should use for this resource.
+# Tells Kubernetes that this object belongs to the ArgoCD Application API.
+
+kind: Application
+# Defines the resource type as an ArgoCD Application.
+# This is the core object ArgoCD uses to track and deploy Git content.
+
+metadata:
+# Contains identifying information about the resource.
+# Allows Kubernetes and ArgoCD to uniquely manage this application.
+
+  name: mother-app
+  # Sets the name of this Application resource.
+  # This becomes the parent application that manages child applications.
+
+  namespace: argocd
+  # Places the Application object in the argocd namespace.
+  # ArgoCD watches this namespace to discover applications it should manage.
+
+  finalizers:
+  # Defines cleanup actions that occur before deletion is completed.
+  # Ensures resources are handled correctly when the application is removed.
+
+    - resources-finalizer.argocd.argoproj.io
+    # Prevents deletion until ArgoCD removes managed resources first.
+    # Helps avoid orphaned Kubernetes resources during cleanup.
+
+spec:
+# Defines the desired state of the application.
+# Tells ArgoCD what to deploy and where to deploy it.
+
+  project: default
+  # Assigns this application to the default ArgoCD project.
+  # Projects provide logical grouping and access control.
+
+  source:
+  # Defines where ArgoCD should retrieve manifests from.
+  # Connects Git as the source of truth.
+
+    repoURL: 'git@github.com:michaelcampbell-spec/Mtn-lehlohonono.git'
+    # Specifies the Git repository containing manifests.
+    # This repository becomes the authoritative configuration source.
+
+    targetRevision: HEAD
+    # Uses the latest commit on the default branch.
+    # Keeps deployments synchronized with the newest Git changes.
+
+    path: argo_git/workloads
+    # Points to the directory containing child application manifests.
+    # Enables the App-of-Apps pattern by discovering child apps.
+
+  destination:
+  # Defines where resources should be deployed.
+  # Connects Git content to a Kubernetes cluster.
+
+    server: 'https://kubernetes.default.svc'
+    # Refers to the Kubernetes API of the current cluster.
+    # Tells ArgoCD where to deploy the managed applications.
+
+    namespace: argocd
+    # Places generated Application resources into the argocd namespace.
+    # Allows ArgoCD to manage the child applications it creates.
+
+  syncPolicy:
+  # Controls how synchronization from Git occurs.
+  # Defines the automation behavior of GitOps.
+
+    automated:
+    # Enables automatic synchronization.
+    # Removes the need for manual sync operations.
+
+      prune: true
+      # Deletes resources that were removed from Git.
+      # Keeps the cluster matching Git exactly.
+
+      selfHeal: true
+      # Reverts manual cluster changes back to Git state.
+      # Enforces Git as the single source of truth.

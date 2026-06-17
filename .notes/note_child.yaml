@@ -1,0 +1,71 @@
+apiVersion: argoproj.io/v1alpha1
+# Specifies which Kubernetes API ArgoCD should use for this resource.
+# Identifies this object as an ArgoCD Application.
+
+kind: Application
+# Defines the resource type as an ArgoCD Application.
+# Represents a child application managed by the parent application.
+
+metadata:
+# Contains identifying information about the resource.
+# Allows Kubernetes and ArgoCD to track this application.
+
+  name: nginx-workload
+  # Sets the name of the child application.
+  # Identifies the workload ArgoCD will deploy and monitor.
+
+  namespace: argocd
+  # Stores the Application object inside the argocd namespace.
+  # Makes the application visible to the ArgoCD controller.
+
+spec:
+# Defines the desired state of the application.
+# Describes the workload ArgoCD should deploy.
+
+  project: default
+  # Assigns the application to the default ArgoCD project.
+  # Places it under the project's permissions and policies.
+
+  source:
+  # Defines where deployment manifests are located.
+  # Links this application to its Git-managed configuration.
+
+    repoURL: 'git@github.com:michaelcampbell-spec/Mtn-lehlohonono.git'
+    # Specifies the Git repository containing workload manifests.
+    # Keeps deployment definitions version-controlled.
+
+    targetRevision: HEAD
+    # Uses the latest commit from the default branch.
+    # Ensures the newest workload configuration is deployed.
+
+    path: workloads/nginx
+    # Points to the directory containing the nginx manifests.
+    # Identifies the exact workload this application manages.
+
+  destination:
+  # Defines where the workload will be deployed.
+  # Connects Git definitions to a Kubernetes target environment.
+
+    server: 'https://kubernetes.default.svc'
+    # Refers to the current Kubernetes cluster API.
+    # Tells ArgoCD which cluster should run the workload.
+
+    namespace: default
+    # Deploys workload resources into the default namespace.
+    # Determines where the nginx pods and services will exist.
+
+  syncPolicy:
+  # Controls synchronization behavior.
+  # Defines how GitOps automation is enforced.
+
+    automated:
+    # Enables automatic synchronization.
+    # Allows changes in Git to deploy automatically.
+
+      prune: true
+      # Removes Kubernetes resources deleted from Git.
+      # Keeps the cluster aligned with repository contents.
+
+      selfHeal: true
+      # Restores resources if someone changes them manually.
+      # Ensures Git remains the authoritative configuration source.
