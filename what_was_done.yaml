@@ -1,0 +1,18 @@
+first.
+
+connect my argocd to github repo via ssh.
+  1:
+    created the ssh keys using ssh-keygen.
+  2:
+    on my github repo i added the public key to github (GUI)
+  3:
+    on my argocd dashboard I added the private key.
+
+second.
+create a mother app that watches the git dir and deployes any chnges that get pushed.
+  1:
+    create the mother app yaml got template off github.
+  2:
+    create a child yaml also got template off github.
+  3:
+    placed my kubeerntes object yamls in the git repo.
