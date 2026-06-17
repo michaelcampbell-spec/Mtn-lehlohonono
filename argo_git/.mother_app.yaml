@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mother-app
+  namespace: argocd
+  # Finalizers ensure child applications are deleted if the mother app is deleted
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    # Use your exact SSH URL that we just validated
+    repoURL: 'git@github.com:michaelcampbell-spec/Mtn-lehlohonono.git'
+    targetRevision: HEAD
+    path: apps/workloads  # <--- It will watch this specific folder
+  destination:
+    server: 'https://default.svc'
+    namespace: argocd     # Child application CRDs must be created in the argocd namespace
+  syncPolicy:
+    automated:
+      prune: true        # Automatically deletes children if you delete their file from Git
+      selfHeal: true     # Overwrites changes if someone edits the child app manually

@@ -1,0 +1,4 @@
+1 connect my argocd to my github repositroy using ssh.
+2 create an app of apps aplication (a mother application that will manage my workloads) ( it will constantly be looking at my github repositrory.
+3 push a deploymet to the repo. Final goal should be the deployment should be deployed on the cluster.
+
