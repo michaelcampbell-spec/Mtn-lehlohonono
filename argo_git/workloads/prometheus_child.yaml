@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.io'
+    repoURL: 'https://prometheus-community.github.io/helm-charts'
     chart: prometheus
     targetRevision: 26.x.x
     helm:
