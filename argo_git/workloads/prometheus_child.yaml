@@ -1,18 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: grafana-workload
+  name: prometheus-workload
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: 'https://grafana.github.io/helm-charts'
-    chart: grafana
-    targetRevision: 8.5.x
+    repoURL: 'https://github.io'
+    chart: prometheus
+    targetRevision: 26.x.x
     helm:
       parameters:
-        - name: service.type
-          value: ClusterIP
+        - name: alertmanager.enabled
+          value: "false"
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: default
