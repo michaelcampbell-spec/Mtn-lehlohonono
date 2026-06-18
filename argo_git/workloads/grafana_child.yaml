@@ -6,15 +6,18 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'git@github.com:michaelcampbell-spec/Mtn-lehlohonono.git'
-    targetRevision: HEAD
-    path: workloads/grafana
+    # 1. Point Argo CD directly to the official Grafana Helm Web Registry
+    repoURL: 'https://grafana.github.io/helm-charts'
+    chart: grafana
+    targetRevision: 8.5.x
+    helm:
+      parameters:
+        - name: service.type
+          value: ClusterIP
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: argocd
+    server: 'https://default.svc'
+    namespace: default
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
