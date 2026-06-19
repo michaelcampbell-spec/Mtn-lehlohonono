@@ -2,10 +2,10 @@ name: Automated ACR Helm Push Pipeline
 on:
   push:
     branches:
-      - feature-charts
+      - Second_branch
 env:
   ACR_NAME: devaksacr12345
-  CHART_PATH: workloads/nginx
+  CHART_PATH: workloads/helm
 jobs:
   build-and-push-chart:
     runs-on: ubuntu-latest
@@ -18,7 +18,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Authenticate Helm to ACR
         run: |
-          USER_NAME="00000000-0000-0000-0000-000000000000" # Dummy username for service principal login
+          USER_NAME="00000000-0000-0000-0000-000000000000"
           PASSWORD=$(az acr login --name ${{ env.ACR_NAME }} --expose-token --output tsv --query accessToken)
           echo "$PASSWORD" | helm registry login ${{ env.ACR_NAME }}.azurecr.io --username $USER_NAME --password-stdin
       - name: Package Helm Chart
