@@ -1,0 +1,23 @@
+name: GitOps CI Safety Pipeline
+
+# Station 1: Trigger Rule (When does this assembly line start running?)
+on:
+  push:
+    branches: [ "main" ]  # Run automatically every single time I push code to the main branch
+
+# Station 2: The Work (What are the robots actually going to do?)
+jobs:
+  yaml-validation:
+    # Tell GitHub to spin up a temporary, clean Ubuntu Linux server in the cloud
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Download your repository code onto the temporary cloud server
+      - name: Checkout Code from GitHub
+        uses: actions/checkout@v4
+
+      # Step 2: Run a Linting/Validation scan on all your Kubernetes YAML files
+      - name: Validate Kubernetes Manifests for Typos
+        uses: kubeval/kubeval-action@master
+        with:
+          files: workloads/  # Look inside your workloads folder (nginx, grafana, etc.)

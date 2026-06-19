@@ -1,0 +1,41 @@
+name: Automated ACR Helm Push Pipeline
+
+on:
+  push:
+    branches:
+      - feature-charts  # <--- Change this to match your second branch name exactly
+
+env:
+  ACR_NAME: devaksacr12345
+  CHART_PATH: workloads/nginx # <--- Change this to the folder path holding your Chart.yaml
+
+jobs:
+  build-and-push-chart:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Download your code onto the clean GitHub Runner machine
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Step 2: Log into the Azure Cloud environment securely using your secret token
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Step 3: Get registry access credentials without running manual "az acr" loops
+      - name: Authenticate Helm to ACR
+        run: |
+          USER_NAME="00000000-0000-0000-0000-000000000000" # Dummy username for service principal login
+          PASSWORD=$(az acr login --name ${{ env.ACR_NAME }} --expose-token --output tsv --query accessToken)
+          echo "$PASSWORD" | helm registry login ${{ env.ACR_NAME }}.azurecr.io --username $USER_NAME --password-stdin
+
+      # Step 4: Package the Helm directory files into a compressed tarball (.tgz)
+      - name: Package Helm Chart
+        run: |
+          helm package ${{ env.CHART_PATH }} --destination .
+
+      # Step 5: Ship the chart artifact directly to your private Azure Container Registry
+      - name: Push Helm Chart to ACR
+        run: |
+          helm push *.tgz oci://${{ env.ACR_NAME }}.azurecr.io/helm
