@@ -1,0 +1,6 @@
+apiVersion: v2
+name: test-prometheus
+description: "Minimal Prometheus Chart to test dynamic ACR loop"
+type: application
+version: 1.0.0
+appVersion: "2.50.0"

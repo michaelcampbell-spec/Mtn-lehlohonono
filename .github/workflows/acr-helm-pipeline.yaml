@@ -5,7 +5,6 @@ on:
       - Second_branch
 env:
   ACR_NAME: devaksacr12345
-  CHART_PATH: workloads/helm
 jobs:
   build-and-push-chart:
     runs-on: ubuntu-latest
@@ -21,9 +20,16 @@ jobs:
           USER_NAME="00000000-0000-0000-0000-000000000000"
           PASSWORD=$(az acr login --name ${{ env.ACR_NAME }} --expose-token --output tsv --query accessToken)
           echo "$PASSWORD" | helm registry login ${{ env.ACR_NAME }}.azurecr.io --username $USER_NAME --password-stdin
-      - name: Package Helm Chart
+      - name: Discover, Package, and Push All Charts
         run: |
-          helm package ${{ env.CHART_PATH }} --destination .
-      - name: Push Helm Chart to ACR
-        run: |
-          helm push *.tgz oci://${{ env.ACR_NAME }}.azurecr.io/helm
+          echo "Starting automatic chart discovery..."
+          find . -name "Chart.yaml" -exec dirname {} \; | while read -r chart_dir; do
+            echo "--------------------------------------------------"
+            echo "Found chart directory: $chart_dir"
+            echo "Packaging chart..."
+            helm package "$chart_dir" --destination .
+            echo "Pushing chart to Azure Container Registry..."
+            helm push *.tgz oci://${{ env.ACR_NAME }}.azurecr.io/helm
+            rm *.tgz
+          done
+          echo "All charts have been processed successfully!"

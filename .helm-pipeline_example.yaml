@@ -1,41 +1,40 @@
 name: Automated ACR Helm Push Pipeline
-
 on:
   push:
     branches:
-      - feature-charts  # <--- Change this to match your second branch name exactly
-
+      - Second_branch
 env:
   ACR_NAME: devaksacr12345
-  CHART_PATH: workloads/nginx # <--- Change this to the folder path holding your Chart.yaml
-
 jobs:
   build-and-push-chart:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Download your code onto the clean GitHub Runner machine
       - name: Checkout Code
         uses: actions/checkout@v4
-
-      # Step 2: Log into the Azure Cloud environment securely using your secret token
       - name: Azure Login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      # Step 3: Get registry access credentials without running manual "az acr" loops
       - name: Authenticate Helm to ACR
         run: |
-          USER_NAME="00000000-0000-0000-0000-000000000000" # Dummy username for service principal login
+          USER_NAME="00000000-0000-0000-0000-000000000000"
           PASSWORD=$(az acr login --name ${{ env.ACR_NAME }} --expose-token --output tsv --query accessToken)
           echo "$PASSWORD" | helm registry login ${{ env.ACR_NAME }}.azurecr.io --username $USER_NAME --password-stdin
-
-      # Step 4: Package the Helm directory files into a compressed tarball (.tgz)
-      - name: Package Helm Chart
+      # DYNAMIC STEP: Loops through your folders automatically
+      - name: Discover, Package, and Push All Charts
         run: |
-          helm package ${{ env.CHART_PATH }} --destination .
-
-      # Step 5: Ship the chart artifact directly to your private Azure Container Registry
-      - name: Push Helm Chart to ACR
-        run: |
-          helm push *.tgz oci://${{ env.ACR_NAME }}.azurecr.io/helm
+          echo "Starting automatic chart discovery..."
+          # Find every directory that contains a Chart.yaml file
+          find . -name "Chart.yaml" -exec dirname {} \; | while read -r chart_dir; do
+            echo "--------------------------------------------------"
+            echo "Found chart directory: $chart_dir"
+            # 1. Package the chart into a .tgz bundle
+            echo "Packaging chart..."
+            helm package "$chart_dir" --destination .
+            # 2. Push the newly created .tgz bundle straight to ACR
+            echo "Pushing chart to Azure Container Registry..."
+            helm push *.tgz oci://${{ env.ACR_NAME }}.azurecr.io/helm
+            # 3. Clean up the local .tgz file so it doesn't interfere with the next loop
+            rm *.tgz
+          done
+          echo "All charts have been processed successfully!"
