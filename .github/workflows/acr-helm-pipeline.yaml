@@ -22,14 +22,8 @@ jobs:
           echo "$PASSWORD" | helm registry login ${{ env.ACR_NAME }}.azurecr.io --username $USER_NAME --password-stdin
       - name: Discover, Package, and Push All Charts
         run: |
-          echo "Starting automatic chart discovery..."
           find . -name "Chart.yaml" -exec dirname {} \; | while read -r chart_dir; do
-            echo "--------------------------------------------------"
-            echo "Found chart directory: $chart_dir"
-            echo "Packaging chart..."
             helm package "$chart_dir" --destination .
-            echo "Pushing chart to Azure Container Registry..."
             helm push *.tgz oci://${{ env.ACR_NAME }}.azurecr.io/helm
             rm *.tgz
           done
-          echo "All charts have been processed successfully!"
