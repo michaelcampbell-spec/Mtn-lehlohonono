@@ -4,4 +4,13 @@ global:
   commonLabels: {}
   leaderElection:
     namespace: ""
-
+webhook:
+  validatingWebhookConfigurationAnnotations: {}
+  mutatingWebhookConfigurationAnnotations: {}
+  serviceAccount:
+    annotations: {}
+crd:
+  enabled: true
+ingressShim: {}
+prometheus:
+  enabled: false
