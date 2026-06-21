@@ -1,0 +1,16 @@
+1) First I made a azure service priciple so I woulnt have to run <az acr login> everytime. 
+# A service priciple in azure is like a service account in kubernets. its a its a objectl that can login and authenticat without human intervention.
+	az ad sp create-for-rbac --name "github-actions-acr-sp" --role "AcrPush" --scopes "/subscriptions/YOUR_SUBSCRIPTION_ID/resourceGroups/YOUR_RESOURCE_GROUP/providers/Microsoft.ContainerRegistry/registries/devaksacr12345" --sdk-auth
+#	 ^ the manual command
+	az ad sp create-for-rbac --name "github-actions-acr-sp" --role "AcrPush" --scopes $(az acr show --name devaksacr12345 --query id --output tsv) --sdk-auth
+
+2) Once the S.P was created I linked it to github. on github UI
+	Open your repository page on GitHub.
+	Navigate to Settings > Secrets and variables > Actions.
+	Click New repository secret.
+	Set the name to exactly: AZURE_CREDENTIALSPaste the entire JSON block from Step 1 into the value box and click save.
+
+3) Then I created the dynamic pipeline file. .github/workflows/acr-helm-pipeline.yaml
+
+4) Lastly I created a child_application.yaml that points to not a path but my acr.
+
