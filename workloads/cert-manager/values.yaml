@@ -1,2 +1,7 @@
 crds:
   enabled: true
+global:
+  commonLabels: {}
+  leaderElection:
+    namespace: ""
+
