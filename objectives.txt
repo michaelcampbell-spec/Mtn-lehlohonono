@@ -1,4 +1,9 @@
 1 connect my argocd to my github repositroy using ssh.
 2 create an app of apps aplication (a mother application that will manage my workloads) ( it will constantly be looking at my github repositrory.
 3 push a deploymet to the repo. Final goal should be the deployment should be deployed on the cluster.
+### New objectives ### 
+Set up local machiene as a self hosted runner.
+Set up a version check system. 
+Tweak the workflow so  if I push a chart and the Chart.yaml the version is a tag that is already present in my container registary it shouldnt push that chart. It should just look for charts that have a 
+diffrent version. It shouldn't fail but just let me know that the version tag is already there. I dont want it to replace anything. 
 
