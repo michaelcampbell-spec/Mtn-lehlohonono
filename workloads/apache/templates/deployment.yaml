@@ -1,19 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: grafana-workload
+  name: apache
+  labels:
+    app: apache
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: grafana
+      app: apache
   template:
     metadata:
       labels:
-        app: grafana
+        app: apache
     spec:
       containers:
-      - name: grafana
-        image: nginx:latest
+      - name: apache
+        image: httpd:2.4
         ports:
-        - containerPort: 3000
+        - containerPort: 80
