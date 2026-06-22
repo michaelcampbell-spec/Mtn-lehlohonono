@@ -1,6 +1,6 @@
 apiVersion: v2
-name: test-grafana
-description: "Minimal Grafana Chart to test dynamic ACR loop"
+name: grafana-workload
+description: "Grafana Chart to test dynamic ACR loop"
 type: application
-version: 1.0.0
+version: 1.0.1
 appVersion: "10.4.0"
