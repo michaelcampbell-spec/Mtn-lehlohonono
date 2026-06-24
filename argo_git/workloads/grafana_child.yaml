@@ -6,25 +6,24 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'oci://ghcr.io/grafana-community/helm-charts'
+    repoURL: https://grafana.github.io/helm-charts
     chart: grafana
-    type: helm
     targetRevision: 8.5.12
     helm:
       values: |
         grafana.ini:
           smtp:
             enabled: true
-            host: "://gmail.com"
+            host: "smtp.gmail.com:587"
             user: "michael.campbell@lsdopen.io"
-            password: "wsnuhfgupskkklgk"
+            password: "REPLACE_WITH_APP_PASSWORD"
             from_address: "michael.campbell@lsdopen.io"
             from_name: "AKS Grafana Alerts"
       parameters:
         - name: service.type
           value: ClusterIP
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: https://kubernetes.default.svc
     namespace: default
   syncPolicy:
     automated:
