@@ -2,3 +2,5 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 kubectl port-forward service/grafana-workload 3000:80 -n default
 
+
+wsnu hfgu pskk klgk 

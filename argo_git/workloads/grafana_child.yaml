@@ -10,6 +10,15 @@ spec:
     chart: grafana
     targetRevision: 8.5.x
     helm:
+      values: |
+        grafana.ini:
+          smtp:
+            enabled: true
+            host: "://gmail.com"
+            user: "michael.campbell@lsdopen.io"
+            password: "wsnuhfgupskkklgk"
+            from_address: "michael.campbell@lsdopen.io"
+            from_name: "AKS Grafana Alerts"
       parameters:
         - name: service.type
           value: ClusterIP
