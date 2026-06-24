@@ -1,4 +1,3 @@
-
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -12,14 +11,13 @@ spec:
     targetRevision: 8.5.x
     helm:
       values: |
-        grafana.ini:
-          smtp:
-            enabled: true
-            host: "smtp.gmail.com:587"
-            user: "michael.campbell@lsdopen.io"
-            password: "wsnuhfgupskkklgk"
-            from_address: "michael.campbell@lsdopen.io"
-            from_name: "AKS Grafana Alerts"
+        smtp:
+          enabled: true
+          host: "smtp.gmail.com:587"
+          user: "michael.campbell@lsdopen.io"
+          password: "wsnuhfgupskkklgk"
+          from_address: "michael.campbell@lsdopen.io"
+          from_name: "AKS Grafana Alerts"
       parameters:
         - name: service.type
           value: ClusterIP
@@ -30,3 +28,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
+
+
+
