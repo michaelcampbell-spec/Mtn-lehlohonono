@@ -1,3 +1,4 @@
+
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -11,11 +12,10 @@ spec:
     targetRevision: 8.5.x
     helm:
       values: |
-        assertNoLeakedSecrets: false
         grafana.ini:
           smtp:
             enabled: true
-            host: "://gmail.com"
+            host: "smtp.gmail.com:587"
             user: "michael.campbell@lsdopen.io"
             password: "wsnuhfgupskkklgk"
             from_address: "michael.campbell@lsdopen.io"
