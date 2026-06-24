@@ -6,15 +6,16 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.io'
+    repoURL: 'oci://registry-1.docker.io/grafanacharts'
     chart: grafana
+    type: helm
     targetRevision: 8.5.x
     helm:
       values: |
         grafana.ini:
           smtp:
             enabled: true
-            host: "smtp.gmail.com:587"
+            host: "://gmail.com"
             user: "michael.campbell@lsdopen.io"
             password: "wsnuhfgupskkklgk"
             from_address: "michael.campbell@lsdopen.io"
