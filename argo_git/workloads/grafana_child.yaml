@@ -19,6 +19,7 @@ spec:
             password: 'wsnuhfgupskkklgk'
             from_address: "michael.campbell@lsdopen.io"
             from_name: "AKS Grafana Alerts"
+            startTLS_policy: "MandatoryStartTLS"
       parameters:
         - name: service.type
           value: ClusterIP
