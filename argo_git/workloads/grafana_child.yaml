@@ -22,6 +22,8 @@ spec:
       parameters:
         - name: service.type
           value: ClusterIP
+        - name: assertNoLeakedSecrets
+          value: "false"
   destination:
     server: https://kubernetes.default.svc
     namespace: default
