@@ -11,13 +11,14 @@ spec:
     targetRevision: 8.5.x
     helm:
       values: |
-        smtp:
-          enabled: true
-          host: "smtp.gmail.com:587"
-          user: "michael.campbell@lsdopen.io"
-          password: "wsnuhfgupskkklgk"
-          from_address: "michael.campbell@lsdopen.io"
-          from_name: "AKS Grafana Alerts"
+        grafana.ini:
+          smtp:
+            enabled: true
+            host: "smtp.gmail.com:587"
+            user: "michael.campbell@lsdopen.io"
+            password: "wsnuhfgupskkklgk"
+            from_address: "michael.campbell@lsdopen.io"
+            from_name: "AKS Grafana Alerts"
       parameters:
         - name: service.type
           value: ClusterIP
