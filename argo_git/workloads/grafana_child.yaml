@@ -6,10 +6,10 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'oci://registry-1.docker.io/grafanacharts'
+    repoURL: 'oci://ghcr.io/grafana/helm-charts'
     chart: grafana
     type: helm
-    targetRevision: 8.5.x
+    targetRevision: 8.5.0
     helm:
       values: |
         grafana.ini:
