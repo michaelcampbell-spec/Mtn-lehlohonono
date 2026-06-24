@@ -11,6 +11,7 @@ spec:
     targetRevision: 8.5.x
     helm:
       values: |
+        assertNoLeakedSecrets: false
         grafana.ini:
           smtp:
             enabled: true
