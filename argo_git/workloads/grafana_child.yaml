@@ -15,8 +15,8 @@ spec:
           smtp:
             enabled: true
             host: "smtp.gmail.com:587"
-            user: "michael.campbell@lsdopen.io"
-            password: 'wsnuhfgupskkklgk'
+            user: "ezekielmichaelson534@gmail.com"
+            password: 'gugkvikhudaefiyb'
             from_address: "michael.campbell@lsdopen.io"
             from_name: "AKS Grafana Alerts"
             startTLS_policy: "MandatoryStartTLS"
