@@ -6,10 +6,10 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'oci://ghcr.io/grafana/helm-charts'
+    repoURL: 'oci://ghcr.io/grafana-community/helm-charts'
     chart: grafana
     type: helm
-    targetRevision: 8.5.x
+    targetRevision: 8.5.12
     helm:
       values: |
         grafana.ini:
@@ -24,7 +24,7 @@ spec:
         - name: service.type
           value: ClusterIP
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: 'https://default.svc'
     namespace: default
   syncPolicy:
     automated:
